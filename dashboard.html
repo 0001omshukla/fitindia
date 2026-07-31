@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FitIndia Dashboard</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 900px; margin: 30px auto; background: #f5f5f5; }
+  h1 { color: #2c3e50; }
+  .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  label { display: block; margin-top: 10px; font-weight: bold; }
+  input, select { padding: 6px; width: 100%; margin-top: 4px; box-sizing: border-box; }
+  button { margin-top: 12px; padding: 10px 16px; background: #2c7a4b; color: white; border: none; border-radius: 5px; cursor: pointer; }
+  button:hover { background: #24603c; }
+  .result { margin-top: 15px; padding: 12px; background: #eef7ee; border-radius: 6px; white-space: pre-wrap; }
+  .risk-high { color: #c0392b; font-weight: bold; }
+  .risk-low { color: #27ae60; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN (shown first) -->
+<div class="card" id="loginCard">
+  <h2>Gym Owner Login</h2>
+  <label>Username</label>
+  <input type="text" id="loginUsername" placeholder="omshukla">
+  <label>Password</label>
+  <input type="password" id="loginPassword" placeholder="Enter password">
+  <button onclick="login()">Log In</button>
+  <div class="result" id="loginResult"></div>
+</div>
+
+<!-- MAIN DASHBOARD (hidden until login succeeds) -->
+<div id="mainDashboard" style="display:none;">
+
+<h1>🏋️ FitIndia Dashboard</h1>
+
+<!-- DIET RECOMMENDATION CARD -->
+<div class="card">
+  <h2>Diet Recommendation</h2>
+  <label>Protein target (g)</label>
+  <input type="number" id="protein" value="80">
+  <label>Budget (₹/day)</label>
+  <input type="number" id="budget" value="150">
+  <label>Diet preference</label>
+  <select id="dietPref">
+    <option value="veg">Vegetarian</option>
+    <option value="nonveg">Non-Vegetarian</option>
+  </select>
+  <label>Region preference</label>
+  <select id="region">
+    <option value="South Indian">South Indian</option>
+    <option value="North Indian">North Indian</option>
+    <option value="Punjabi">Punjabi</option>
+    <option value="Bengali">Bengali</option>
+    <option value="Maharashtrian">Maharashtrian</option>
+  </select>
+  <button onclick="getDiet()">Get Diet Plan</button>
+  <div class="result" id="dietResult"></div>
+</div>
+
+<!-- CHURN PREDICTION CARD -->
+<div class="card">
+  <h2>Churn Risk Check</h2>
+  <label>Member code</label>
+  <input type="text" id="memberCode" value="FIT-8E6LE3">
+  <button onclick="checkChurn()">Check Churn Risk</button>
+  <div class="result" id="churnResult"></div>
+</div>
+
+<!-- CHECK-INS CARD -->
+<div class="card">
+  <h2>Recent Check-ins</h2>
+  <button onclick="loadCheckins()">Refresh Check-ins</button>
+  <div class="result" id="checkinsResult"></div>
+</div>
+
+</div> <!-- closes mainDashboard -->
+
+<script>
+  const API_BASE = "http://127.0.0.1:8000";
+
+  async function login() {
+    const username = document.getElementById("loginUsername").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const res = await fetch(API_BASE + "/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById("loginCard").style.display = "none";
+      document.getElementById("mainDashboard").style.display = "block";
+    } else {
+      document.getElementById("loginResult").innerText = "❌ Incorrect username or password. Try again.";
+    }
+  }
+
+  async function getDiet() {
+    const body = {
+      protein_target_g: parseFloat(document.getElementById("protein").value),
+      budget_rupees: parseFloat(document.getElementById("budget").value),
+      diet_pref: document.getElementById("dietPref").value,
+      region_pref: document.getElementById("region").value
+    };
+    const res = await fetch(API_BASE + "/diet/recommend", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    document.getElementById("dietResult").innerText =
+      "Foods: " + data.plan.join(", ") +
+      "\nTotal protein: " + data.total_protein_g + "g" +
+      "\nTotal cost: ₹" + data.total_cost_rupees +
+      "\nTotal calories: " + data.total_calories;
+  }
+
+  async function checkChurn() {
+    const code = document.getElementById("memberCode").value;
+    const res = await fetch(API_BASE + "/churn/predict/" + code);
+    const data = await res.json();
+    const riskLabel = data.churn_prediction === 1
+      ? '<span class="risk-high">HIGH RISK</span>'
+      : '<span class="risk-low">LOW RISK</span>';
+    document.getElementById("churnResult").innerHTML =
+      "Member: " + data.member_code + "<br>" +
+      "Risk level: " + riskLabel + "<br>" +
+      "Churn probability: " + (data.churn_risk_probability * 100).toFixed(1) + "%";
+  }
+
+  async function loadCheckins() {
+    const res = await fetch(API_BASE + "/members/checkins");
+    const data = await res.json();
+    let text = "";
+    data.checkins.forEach(row => {
+      text += row[0] + " -- " + row[1] + " (" + row[2] + ")\n";
+    });
+    document.getElementById("checkinsResult").innerText = text || "No check-ins yet.";
+  }
+</script>
+
+</body>
+</html>

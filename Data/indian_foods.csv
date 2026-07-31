@@ -1,0 +1,31 @@
+food_name,region,veg_or_nonveg,serving_size,calories,protein_g,carbs_g,fat_g,cost_rupees
+Roti (whole wheat),North Indian,veg,1 piece (30g),80,3,15,1,2
+Rice (cooked),Pan India,veg,1 cup (150g),200,4,45,0.5,3
+Dal (toor/arhar),North Indian,veg,1 cup (200g),180,12,25,5,8
+Rajma (kidney beans curry),Punjabi,veg,1 cup (200g),220,14,30,6,12
+Chole (chickpea curry),Punjabi,veg,1 cup (200g),210,12,28,7,10
+Paneer (cooked),North Indian,veg,100g,265,18,6,20,25
+Curd/Dahi,Pan India,veg,1 cup (200g),120,7,10,6,10
+Idli,South Indian,veg,2 pieces,140,4,28,0.5,10
+Dosa (plain),South Indian,veg,1 piece,133,3,20,4,15
+Sambar,South Indian,veg,1 cup (200g),150,8,20,4,8
+Upma,South Indian,veg,1 cup (200g),192,5,30,6,10
+Chicken breast (cooked),Pan India,nonveg,100g,165,31,0,3.6,45
+Egg (boiled),Pan India,nonveg,1 whole,78,6,0.6,5,6
+Fish curry (rohu),Bengali,nonveg,150g,220,25,5,10,40
+Soy chunks (cooked),Pan India,veg,100g,345,52,33,0.5,15
+Sprouts (moong),Pan India,veg,1 cup (100g),105,7,19,0.4,5
+Peanuts (roasted),Pan India,veg,30g,170,7,5,14,5
+Milk (toned),Pan India,veg,1 cup (200ml),120,6,10,4,12
+Whey protein (imported),Pan India,veg,1 scoop (30g),120,24,3,2,80
+Chana (boiled chickpeas),Pan India,veg,1 cup (150g),210,11,35,3,6
+Poha,Maharashtrian,veg,1 cup (150g),180,4,32,4,8
+Khichdi,Pan India,veg,1 cup (200g),190,7,32,4,7
+Bhindi sabzi,North Indian,veg,1 cup (150g),120,3,12,7,10
+Aloo sabzi,North Indian,veg,1 cup (150g),160,3,25,6,8
+Palak paneer,North Indian,veg,1 cup (200g),230,14,10,16,20
+Curd rice,South Indian,veg,1 cup (200g),210,7,35,5,10
+Mutton curry,Pan India,nonveg,150g,320,26,6,22,60
+Banana,Pan India,veg,1 medium,105,1,27,0.4,5
+Almonds,Pan India,veg,10 pieces,70,2.5,2.5,6,15
+Green peas (cooked),Pan India,veg,1 cup (150g),135,8,25,0.5,8
