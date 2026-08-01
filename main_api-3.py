@@ -19,6 +19,7 @@ defines one "endpoint" -- a specific request the app can respond to.
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import pandas as pd
 import pickle
@@ -87,7 +88,13 @@ class LoginRequest(BaseModel):
 
 @app.get("/")
 def home():
-    """A simple check to confirm the API is alive."""
+    """Serves the dashboard webpage directly, so the live URL shows the app itself."""
+    return FileResponse("dashboard.html")
+
+
+@app.get("/api-status")
+def api_status():
+    """A simple check to confirm the API is alive (moved from '/')."""
     return {"message": "FitIndia API is running!"}
 
 
